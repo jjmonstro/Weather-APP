@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 
 namespace WeatherAPP.Models
 {
-    internal class Coordenadas
+    internal class Coord
     {
         [JsonPropertyName("lon")]
         public double Lon { get; set; }
+
 
         [JsonPropertyName("lat")]
         public double Lat { get; set; }

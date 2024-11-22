@@ -10,16 +10,15 @@ using WeatherAPP.Models;
 
 namespace WeatherAPP.Services
 {
-    internal class InformacoesService
+    internal class ResponseService
     {
         private HttpClient httpClient;
-        private ObservableCollection<Informacoes> informacoes; //isso aui é para um get geral, que traz varia, ou seja uma collection
-        private Informacoes informacoe; //isso aqui é para get byid que só traz uma
+        private FullResponse fullResponse; //isso aqui é para get byid que só traz uma
         private JsonSerializerOptions jsonSerializerOptions; // configurar/formatar o JSON
         Uri uri = new Uri("http://api.openweathermap.org/data/2.5/weather?q=");
         String key = "&APPID=ab73f17bcbdd1656c1518494388ce6e8";
 
-        public InformacoesService()
+        public ResponseService()
         {
 
             httpClient = new HttpClient();
@@ -33,32 +32,12 @@ namespace WeatherAPP.Services
 
         }
 
-        public async Task<ObservableCollection<Informacoes>> GetInformacoesAsync() // TASK: usado no await
+
+
+        public async Task<FullResponse> GetResponseByIdAsync(String cidade) // TASK: usado no await
         {
-
-            try
-            {
-                HttpResponseMessage response = await httpClient.GetAsync(uri);//quero saber todos os posts;
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();// tranforma o conteudo em string;
-                    informacoes = JsonSerializer.Deserialize<ObservableCollection<Informacoes>>(content, jsonSerializerOptions);
-                }
-            }
-            catch
-            {
-
-            }
-            return informacoes;
-        }
-
-
-
-        public async Task<Informacoes> GetSalaByIdAsync(String cidade) // TASK: usado no await
-        {
-            Debug.WriteLine("Chamou!! o GetSalaByIdAsync");
-            Informacoes sala = new Informacoes
-                ();
+            Debug.WriteLine("Chamou!! o GetResponseByIdAsync");
+            
             try
             {
                 HttpResponseMessage response = await httpClient.GetAsync($"{uri}{cidade}{key}");//quero saber todos os posts;
@@ -68,7 +47,7 @@ namespace WeatherAPP.Services
 
                     Debug.WriteLine($"Resposta JSON: {content}");
 
-                    informacoe = JsonSerializer.Deserialize<Informacoes>(content, jsonSerializerOptions);
+                    fullResponse = JsonSerializer.Deserialize<FullResponse>(content, jsonSerializerOptions);
                 }
                 else
                 {
@@ -87,7 +66,7 @@ namespace WeatherAPP.Services
                 Debug.WriteLine($"Exceção ocorrida: {ex.Message}");
             }
             
-            return informacoe;
+            return fullResponse;
         }
 
 

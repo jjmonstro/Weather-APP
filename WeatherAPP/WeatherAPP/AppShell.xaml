@@ -8,8 +8,8 @@
     Title="WeatherAPP">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
+        
+        ContentTemplate="{DataTemplate local:Views.MainPage}"
         Route="MainPage" />
 
 </Shell>
