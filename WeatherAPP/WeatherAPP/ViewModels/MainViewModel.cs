@@ -50,13 +50,13 @@ namespace WeatherAPP.ViewModels
                 Debug.WriteLine("Cidade ta nulo");
                 return;
             }
-            FullResponse fullResponse = await responseService.GetResponseByIdAsync(Cidade);
+            FullResponse fullResponse = await responseService.GetResponseByCidadeAsync(Cidade);
 
             Descricao = "Descrição: " + fullResponse.Weather[0].Description;
-            Temperatura = "Temperatura atual: " + fullResponse.Main.Temp.ToString() + " °F";
-            TemperaturaMax = "Temperatura máxima: " + fullResponse.Main.TempMax.ToString() + " °F";
-            TemperaturaMin = "Temperatura mínima: " + fullResponse.Main.TempMin.ToString() + " °F";
-            Sensacao = "Sensação térmica: " + fullResponse.Main.FeelsLike.ToString() + " °F";
+            Temperatura = "Temperatura atual: " + fullResponse.Main.Temp.ToString() + " °C";
+            TemperaturaMax = "Temperatura máxima: " + fullResponse.Main.TempMax.ToString() + " °C";
+            TemperaturaMin = "Temperatura mínima: " + fullResponse.Main.TempMin.ToString() + " °C";
+            Sensacao = "Sensação térmica: " + fullResponse.Main.FeelsLike.ToString() + " °C";
             Umidade = "Umidade: " + fullResponse.Main.Humidity.ToString() + "%";
             
         }

@@ -16,8 +16,8 @@ namespace WeatherAPP.Services
         private FullResponse fullResponse; //isso aqui é para get byid que só traz uma
         private JsonSerializerOptions jsonSerializerOptions; // configurar/formatar o JSON
         Uri uri = new Uri("http://api.openweathermap.org/data/2.5/weather?q=");
-        String key = "&APPID=ab73f17bcbdd1656c1518494388ce6e8";
-
+        String key = "APPID=ab73f17bcbdd1656c1518494388ce6e8";
+        String options = "lang=pt_br&units=metric";
         public ResponseService()
         {
 
@@ -34,13 +34,13 @@ namespace WeatherAPP.Services
 
 
 
-        public async Task<FullResponse> GetResponseByIdAsync(String cidade) // TASK: usado no await
+        public async Task<FullResponse> GetResponseByCidadeAsync(String cidade) // TASK: usado no await
         {
             Debug.WriteLine("Chamou!! o GetResponseByIdAsync");
             
             try
             {
-                HttpResponseMessage response = await httpClient.GetAsync($"{uri}{cidade}{key}");//quero saber todos os posts;
+                HttpResponseMessage response = await httpClient.GetAsync($"{uri}{cidade}&{options}&{key}");//quero saber todos os posts;
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();// tranforma o conteudo em string;

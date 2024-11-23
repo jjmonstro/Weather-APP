@@ -9,7 +9,5 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = new MainViewModel();
-		ResponseService responseService = new ResponseService();
-		responseService.GetResponseByIdAsync("São Paulo,br");
 	}
 }
