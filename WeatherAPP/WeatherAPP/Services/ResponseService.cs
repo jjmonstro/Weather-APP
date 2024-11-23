@@ -37,7 +37,7 @@ namespace WeatherAPP.Services
         public async Task<FullResponse> GetResponseByCidadeAsync(String cidade) // TASK: usado no await
         {
             Debug.WriteLine("Chamou!! o GetResponseByIdAsync");
-            
+
             try
             {
                 HttpResponseMessage response = await httpClient.GetAsync($"{uri}{cidade}&{options}&{key}");//quero saber todos os posts;

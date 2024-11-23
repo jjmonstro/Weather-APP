@@ -38,5 +38,9 @@
                Text="{Binding Umidade}"
                Margin="5"/>
 
+        <Image
+            Source="porco.jpg"
+            HeightRequest="400"/>
+
     </VerticalStackLayout>
 </ContentPage>
