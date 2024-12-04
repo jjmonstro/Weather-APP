@@ -35,30 +35,72 @@ namespace WeatherAPP.ViewModels
         [ObservableProperty]
         public String umidade;
 
+        [ObservableProperty]
+        public string imagem;
+
+
         private ResponseService responseService = new ResponseService();
 
         public ICommand BuscarCommand { get; set; }
+
+
         public MainViewModel()
         {
             BuscarCommand = new Command(Buscar);
+            GetaLatLongAsync();
         }
 
         public async void Buscar()
         {
-            if (Cidade==null)
+            if (Cidade == null)
             {
                 Debug.WriteLine("Cidade ta nulo");
                 return;
             }
             FullResponse fullResponse = await responseService.GetResponseByCidadeAsync(Cidade);
 
-            Descricao = "Descrição: " + fullResponse.Weather[0].Description;
-            Temperatura = "Temperatura atual: " + fullResponse.Main.Temp.ToString() + " °C";
-            TemperaturaMax = "Temperatura máxima: " + fullResponse.Main.TempMax.ToString() + " °C";
-            TemperaturaMin = "Temperatura mínima: " + fullResponse.Main.TempMin.ToString() + " °C";
-            Sensacao = "Sensação térmica: " + fullResponse.Main.FeelsLike.ToString() + " °C";
-            Umidade = "Umidade: " + fullResponse.Main.Humidity.ToString() + "%";
-            
+            AtualizarTela(fullResponse);
+        }
+
+        //esquema de pegar a localização
+        public async Task<(double Latitude, double Longitude)> GetaLatLongAsync()
+        {
+            try
+            {
+                
+                var location = await Geolocation.GetLocationAsync(new GeolocationRequest
+                {
+                    DesiredAccuracy = GeolocationAccuracy.Medium,
+                    Timeout = TimeSpan.FromSeconds(10)
+                });
+
+                if (location != null)
+                {
+                    Debug.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}");
+                    FullResponse fullResponse = await responseService.GetResponseByCoordAsync(location.Latitude.ToString(),location.Longitude.ToString());
+                    AtualizarTela(fullResponse);
+                    return (location.Latitude, location.Longitude);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Erro ao obter localização: {ex.Message}");
+            }
+
+            // Retorna coordenadas inválidas caso não consiga obter a localização
+            return (0, 0);
+        }
+
+        public void AtualizarTela(FullResponse fullResponse)
+        {
+            Descricao = fullResponse.Weather[0].Description;
+            Temperatura = fullResponse.Main.Temp.ToString() + " °C";
+            TemperaturaMax = fullResponse.Main.TempMax.ToString() + " °C";
+            TemperaturaMin = fullResponse.Main.TempMin.ToString() + " °C";
+            Sensacao = fullResponse.Main.FeelsLike.ToString() + " °C";
+            Umidade = fullResponse.Main.Humidity.ToString() + "%";
+            Imagem = fullResponse.Weather[0].Main.ToLower() + ".png";
+            Debug.WriteLine(Imagem);
         }
     }
 }
